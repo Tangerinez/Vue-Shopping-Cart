@@ -10,7 +10,7 @@
         <p v-else :class="{ outOfStock: !inStock }">Out of Stock</p>
 
         <ul>
-          <li v-for="detail in details" :key="detail.id">{{ detail }}</li>
+          <li class="socks-details-list" v-for="detail in details" :key="detail.id">{{ detail }}</li>
         </ul>
 
         <div
@@ -118,5 +118,8 @@ body {
 }
 .outOfStock {
   text-decoration: line-through;
+}
+.socks-details-list {
+  font-weight: bolder;
 }
 </style>
