@@ -4,7 +4,7 @@
       <p>Cart: {{ cart.length }}</p>
     </div>
     <product :premium="premium" @add-to-cart="updateCart" />
-    <!-- Listening for DOM event addToCart method in child, which is $emitting to add-to-cart and passing the item's ID here in the parent -->
+    <!-- Listening for DOM event addToCart method in Product.vue, which is $emitting to add-to-cart and passing the item's ID here in the parent -->
     <!-- premium attribute being binded to component -->
   </div>
 </template>
@@ -36,6 +36,11 @@ export default {
 body {
   font-family: tahoma;
   color: #282828;
-  margin: 0px;
+  margin-bottom: 4em;
+}
+.cart {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 5em;
 }
 </style>

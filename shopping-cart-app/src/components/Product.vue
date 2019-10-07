@@ -1,47 +1,68 @@
 <template>
-  <div class="product">
-    <div class="product-img">
-      <img class="sock" :src="image" />
-      <!-- Binds src attribute to image from image()-->
-    </div>
-    <div class="product-info">
-      <h1>{{ title }}</h1>
-      <!-- title() -->
-      <p v-if="inStock">In Stock</p>
-      <p v-else :class="{ outOfStock: !inStock }">Out of Stock</p>
-      <!-- Class binding based off of inStock() -->
-      <p>Shipping: {{ shipping }}</p>
-      <!-- shipping() -->
+  <div class="big-product-container">
+    <div class="product">
+      <div class="product-img">
+        <img class="sock" :src="image" />
+        <!-- Binds src attribute to image from image()-->
+      </div>
+      <div class="product-info">
+        <h1>{{ title }}</h1>
+        <!-- title() -->
+        <p v-if="inStock">In Stock</p>
+        <p v-else :class="{ outOfStock: !inStock }">Out of Stock</p>
+        <!-- Class binding based off of inStock() -->
+        <p>Shipping: {{ shipping }}</p>
+        <!-- shipping() -->
 
+        <ul>
+          <li class="socks-details-list" v-for="detail in details" :key="detail.id">{{ detail }}</li>
+          <!-- list generation with key binding -->
+        </ul>
+
+        <div
+          v-for="(variant, index) in variants"
+          :key="variant.variantID"
+          class="color-box"
+          :style="{ backgroundColor: variant.variantColor }"
+          @mouseover="updateProduct(index)"
+        ></div>
+        <!-- Updates product image and info based off of index from updateProduct(index) method -->
+        <button
+          v-on:click="addToCart"
+          :disabled="!inStock"
+          :class="{ disabledButton: !inStock }"
+        >Add to Cart</button>
+        <!-- button disabled when item is not in stock, and disabledButton class is only present when inStock is false -->
+      </div>
+    </div>
+    <div>
+      <h2>Reviews</h2>
+      <p v-if="!reviews.length">There are no reviews yet.</p>
+      <!-- Displays p-tag only if length is 0 -->
       <ul>
-        <li class="socks-details-list" v-for="detail in details" :key="detail.id">{{ detail }}</li>
-        <!-- list generation with key binding -->
+        <li v-for="review in reviews" :key="review.id">
+          <p>{{ review.name }}</p>
+          <p>Rating: {{ review.rating }}</p>
+          <p>{{ review.review }}</p>
+        </li>
       </ul>
-
-      <div
-        v-for="(variant, index) in variants"
-        :key="variant.variantID"
-        class="color-box"
-        :style="{ backgroundColor: variant.variantColor }"
-        @mouseover="updateProduct(index)"
-      ></div>
-      <!-- Updates product image and info based off of index from updateProduct(index) method -->
-      <button
-        v-on:click="addToCart"
-        :disabled="!inStock"
-        :class="{ disabledButton: !inStock }"
-      >Add to Cart</button>
-      <!-- button disabled when item is not in stock, and disabledButton class is only present when inStock is false -->
     </div>
+
+    <product-review @review-submitted="addReview" />
+    <!-- Listening for DOM event addReview method in ProductReview.vue, which is $emitting to review-submitted and passing the item's review object here in the parent -->
   </div>
 </template>
 
 <script>
+import ProductReview from "@/components/ProductReview.vue";
+
 export default {
-  name: "product" /* class or Id name of encompassing div */,
+  name: "product" /* name of product */,
+  components: {
+    ProductReview
+  },
   props: {
     /* Receive props from App.Vue, and specify prop name and Type */
-
     premium: Boolean
   },
   data() {
@@ -68,7 +89,8 @@ export default {
             "https://www.vuemastery.com/images/challenges/vmSocks-blue-onWhite.jpg",
           variantQuantity: 0
         }
-      ]
+      ],
+      reviews: []
     };
   },
   methods: {
@@ -81,6 +103,9 @@ export default {
     },
     updateProduct(index) {
       this.selectedVariant = index;
+    },
+    addReview(productReview) {
+      this.reviews.push(productReview);
     }
   },
   computed: {
@@ -106,6 +131,12 @@ export default {
 </script>
 
 <style scoped>
+.big-product-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .product {
   display: flex;
   flex-direction: row;
