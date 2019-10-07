@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <product />
+    <product :premium="premium" />
+    <!-- premium attribute being binded to component -->
   </div>
 </template>
 
@@ -11,6 +12,11 @@ export default {
   name: "app",
   components: {
     Product
+  },
+  data() {
+    return {
+      premium: false /* prop being passed to Product component */
+    };
   }
 };
 </script>

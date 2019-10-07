@@ -2,14 +2,20 @@
   <div class="product">
     <div class="product-img">
       <img class="sock" :src="image" />
+      <!-- Binds src attribute to image from image()-->
     </div>
     <div class="product-info">
       <h1>{{ title }}</h1>
+      <!-- title() -->
       <p v-if="inStock">In Stock</p>
       <p v-else :class="{ outOfStock: !inStock }">Out of Stock</p>
+      <!-- Class binding based off of inStock() -->
+      <p>Shipping: {{ shipping }}</p>
+      <!-- shipping() -->
 
       <ul>
         <li class="socks-details-list" v-for="detail in details" :key="detail.id">{{ detail }}</li>
+        <!-- list generation with key binding -->
       </ul>
 
       <div
@@ -19,11 +25,13 @@
         :style="{ backgroundColor: variant.variantColor }"
         @mouseover="updateProduct(index)"
       ></div>
+      <!-- Updates product image and info based off of index from updateProduct(index) method -->
       <button
         v-on:click="addToCart"
         :disabled="!inStock"
         :class="{ disabledButton: !inStock }"
       >Add to Cart</button>
+      <!-- button disabled when item is not in stock, and disabledButton class is only present when inStock is false -->
       <div class="cart">
         <p>Cart: {{ cart }}</p>
       </div>
@@ -33,7 +41,12 @@
 
 <script>
 export default {
-  name: "product",
+  name: "product" /* class or Id name of encompassing div */,
+  props: {
+    /* Receive props from App.Vue, and specify prop name and Type */
+
+    premium: Boolean
+  },
   data() {
     return {
       product: "Socks",
@@ -63,6 +76,7 @@ export default {
     };
   },
   methods: {
+    /* methods alter data permanently per session */
     addToCart() {
       this.cart += 1;
     },
@@ -71,6 +85,7 @@ export default {
     }
   },
   computed: {
+    /* computed properties used for manipulating data together */
     title() {
       return this.brand + " " + this.product;
     },
@@ -79,6 +94,13 @@ export default {
     },
     inStock() {
       return this.variants[this.selectedVariant].variantQuantity;
+    },
+    shipping() {
+      if (this.premium) {
+        // premium is prop passed from App.vue
+        return "Free";
+      }
+      return `$2.99`;
     }
   }
 };
