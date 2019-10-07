@@ -32,9 +32,6 @@
         :class="{ disabledButton: !inStock }"
       >Add to Cart</button>
       <!-- button disabled when item is not in stock, and disabledButton class is only present when inStock is false -->
-      <div class="cart">
-        <p>Cart: {{ cart }}</p>
-      </div>
     </div>
   </div>
 </template>
@@ -71,14 +68,16 @@ export default {
             "https://www.vuemastery.com/images/challenges/vmSocks-blue-onWhite.jpg",
           variantQuantity: 0
         }
-      ],
-      cart: 0
+      ]
     };
   },
   methods: {
     /* methods alter data permanently per session */
     addToCart() {
-      this.cart += 1;
+      this.$emit(
+        "add-to-cart",
+        this.variants[this.selectedVariant].variantID
+      ); /* variant ID is being passed into add-to-cart, which is bound to the updateCart method in App.vue */
     },
     updateProduct(index) {
       this.selectedVariant = index;

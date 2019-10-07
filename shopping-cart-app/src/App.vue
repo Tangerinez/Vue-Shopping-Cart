@@ -1,6 +1,10 @@
 <template>
   <div id="app">
-    <product :premium="premium" />
+    <div class="cart">
+      <p>Cart: {{ cart.length }}</p>
+    </div>
+    <product :premium="premium" @add-to-cart="updateCart" />
+    <!-- Listening for DOM event addToCart method in child, which is $emitting to add-to-cart and passing the item's ID here in the parent -->
     <!-- premium attribute being binded to component -->
   </div>
 </template>
@@ -15,8 +19,15 @@ export default {
   },
   data() {
     return {
-      premium: false /* prop being passed to Product component */
+      premium: false /* prop being passed to Product component */,
+      cart: []
     };
+  },
+  methods: {
+    updateCart(id) {
+      /* receiving id from addToCart method in child and pushing that id into cart array in data */
+      this.cart.push(id);
+    }
   }
 };
 </script>
