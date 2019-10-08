@@ -35,31 +35,18 @@
         <!-- button disabled when item is not in stock, and disabledButton class is only present when inStock is false -->
       </div>
     </div>
-    <div>
-      <h2>Reviews</h2>
-      <p v-if="!reviews.length">There are no reviews yet.</p>
-      <!-- Displays p-tag only if length is 0 -->
-      <ul>
-        <li v-for="review in reviews" :key="review.id">
-          <p>{{ review.name }}</p>
-          <p>Rating: {{ review.rating }}</p>
-          <p>{{ review.review }}</p>
-        </li>
-      </ul>
-    </div>
 
-    <product-review @review-submitted="addReview" />
-    <!-- Listening for DOM event addReview method in ProductReview.vue, which is $emitting to review-submitted and passing the item's review object here in the parent -->
+    <product-tabs :reviews="reviews" />
   </div>
 </template>
 
 <script>
-import ProductReview from "@/components/ProductReview.vue";
+import ProductTabs from "@/components/ProductTabs.vue";
 
 export default {
   name: "product" /* name of product */,
   components: {
-    ProductReview
+    ProductTabs
   },
   props: {
     /* Receive props from App.Vue, and specify prop name and Type */
@@ -103,9 +90,6 @@ export default {
     },
     updateProduct(index) {
       this.selectedVariant = index;
-    },
-    addReview(productReview) {
-      this.reviews.push(productReview);
     }
   },
   computed: {
@@ -126,6 +110,12 @@ export default {
       }
       return `$2.99`;
     }
+  },
+  mounted() {
+    // A new Vue instance must be created for the reviews to be added into productReview!!! Currently this is not working
+    eventBus.$on("review-submitted", productReview => {
+      this.reviews.push(productReview);
+    });
   }
 };
 </script>

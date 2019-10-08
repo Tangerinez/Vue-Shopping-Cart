@@ -77,7 +77,6 @@ export default {
 
 <style scoped>
 .product-review-container {
-  width: 50%;
   border: 1px solid grey;
   padding-left: 1em;
   padding-top: 1em;
